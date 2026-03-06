@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { vitals, insertVitalsSchema } from './schema';
+import { vitals, alerts } from './schema';
 
 export const api = {
   vitals: {
@@ -28,6 +28,30 @@ export const api = {
     path: '/api/anomalies' as const,
     responses: {
       200: z.array(z.custom<typeof vitals.$inferSelect>()),
+    }
+  },
+  updateStatus: {
+    method: 'PATCH' as const,
+    path: '/api/patients/:id/status' as const,
+    input: z.object({ status: z.string(), notes: z.string().optional() }),
+    responses: {
+      200: z.custom<typeof vitals.$inferSelect>(),
+    }
+  },
+  alerts: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/alerts' as const,
+      responses: {
+        200: z.array(z.custom<typeof alerts.$inferSelect>()),
+      }
+    },
+    markRead: {
+      method: 'POST' as const,
+      path: '/api/alerts/:id/read' as const,
+      responses: {
+        200: z.object({ success: z.boolean() }),
+      }
     }
   }
 };

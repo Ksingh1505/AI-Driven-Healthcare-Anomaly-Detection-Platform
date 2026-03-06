@@ -28,12 +28,31 @@ export async function registerRoutes(
     res.json(anomalies);
   });
 
+  app.patch(api.updateStatus.path, async (req, res) => {
+    const { status, notes } = api.updateStatus.input.parse(req.body);
+    const updated = await storage.updatePatientStatus(req.params.id, status, notes);
+    if (!updated) return res.status(404).json({ message: "Patient not found" });
+    res.json(updated);
+  });
+
+  app.get(api.alerts.list.path, async (req, res) => {
+    const alerts = await storage.getAlerts();
+    res.json(alerts);
+  });
+
+  app.post(api.alerts.markRead.path, async (req, res) => {
+    const success = await storage.markAlertRead(Number(req.params.id));
+    res.json({ success });
+  });
+
   // Background simulator
   setInterval(async () => {
     const patients = ["P001", "P002", "P003", "P004", "P005"];
     const patientId = patients[Math.floor(Math.random() * patients.length)];
     
     const isAnomaly = Math.random() < 0.1;
+    const severityScore = isAnomaly ? 0.7 + Math.random() * 0.3 : 0.1 + Math.random() * 0.2;
+    const status = isAnomaly ? (severityScore > 0.9 ? 'critical' : 'warning') : 'stable';
     
     await storage.createVital({
       patientId,
@@ -44,8 +63,20 @@ export async function registerRoutes(
       bloodPressureDiastolic: isAnomaly ? 90 + Math.random() * 20 : 70 + Math.random() * 10,
       respiratoryRate: isAnomaly ? 25 + Math.random() * 10 : 14 + Math.random() * 6,
       anomalyFlag: isAnomaly,
-      severityScore: isAnomaly ? 0.7 + Math.random() * 0.3 : 0.1 + Math.random() * 0.2
+      severityScore,
+      status,
+      notes: isAnomaly ? "Abnormal vitals detected" : null
     });
+
+    if (isAnomaly) {
+      await storage.createAlert({
+        patientId,
+        type: severityScore > 0.9 ? 'critical_event' : 'anomaly_detected',
+        severity: severityScore > 0.9 ? 'high' : 'medium',
+        message: `Patient ${patientId} showing ${status} vitals.`,
+        isRead: false
+      });
+    }
   }, 2000);
 
   // Initial seed
@@ -61,7 +92,9 @@ export async function registerRoutes(
       bloodPressureDiastolic: 70 + Math.random() * 10,
       respiratoryRate: 14 + Math.random() * 6,
       anomalyFlag: false,
-      severityScore: 0.1 + Math.random() * 0.2
+      severityScore: 0.1 + Math.random() * 0.2,
+      status: 'stable',
+      notes: null
     });
   }
 

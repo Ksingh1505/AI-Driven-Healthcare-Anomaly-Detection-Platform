@@ -51,6 +51,20 @@ export function useAnomalies() {
       const parsed = api.anomalies.responses[200].parse(data);
       return mapVitalsDates(parsed).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     },
-    refetchInterval: 5000, // Real-time polling
+    refetchInterval: 5000,
+  });
+}
+
+export function useAlerts() {
+  return useQuery({
+    queryKey: [api.alerts.list.path],
+    queryFn: async () => {
+      const res = await fetch(api.alerts.list.path, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch alerts");
+      const data = await res.json();
+      const parsed = api.alerts.list.responses[200].parse(data);
+      return parsed.map(a => ({ ...a, timestamp: new Date(a.timestamp) }));
+    },
+    refetchInterval: 5000,
   });
 }

@@ -1,11 +1,12 @@
-import { Users, AlertTriangle, Activity } from "lucide-react";
-import { usePatients, useAnomalies } from "@/hooks/use-vitals";
+import { Users, AlertTriangle, Activity, Bell } from "lucide-react";
+import { usePatients, useAnomalies, useAlerts } from "@/hooks/use-vitals";
 
 export function KPICards() {
   const { data: patients = [] } = usePatients();
   const { data: anomalies = [] } = useAnomalies();
+  const { data: alerts = [] } = useAlerts();
 
-  const criticalAnomalies = anomalies.filter((a) => (a.severityScore ?? 0) > 0.8).length;
+  const criticalCount = alerts.filter(a => a.severity === 'high').length;
 
   const kpis = [
     {
@@ -26,17 +27,25 @@ export function KPICards() {
     },
     {
       title: "Critical Alerts",
-      value: criticalAnomalies,
+      value: criticalCount,
       icon: AlertTriangle,
       color: "text-destructive",
       bg: "bg-destructive/10",
       border: "border-destructive/20",
-      animate: criticalAnomalies > 0 ? "pulse-glow" : "",
+      animate: criticalCount > 0 ? "pulse-glow" : "",
+    },
+    {
+      title: "System Status",
+      value: "Online",
+      icon: Bell,
+      color: "text-emerald-400",
+      bg: "bg-emerald-400/10",
+      border: "border-emerald-400/20",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {kpis.map((kpi, i) => (
         <div
           key={i}
