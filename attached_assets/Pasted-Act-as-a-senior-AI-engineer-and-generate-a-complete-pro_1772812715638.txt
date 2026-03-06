@@ -1,0 +1,113 @@
+Act as a senior AI engineer and generate a complete production-level project.
+
+Project Title:
+AI-Driven Healthcare Anomaly Detection Platform
+
+Goal:
+Build a real-time healthcare monitoring system that detects abnormal patient vitals using machine learning and deep learning.
+
+Tech Stack:
+Python
+Apache Kafka
+Scikit-learn
+TensorFlow/Keras
+PostgreSQL
+Flask REST API
+Streamlit dashboard
+Docker
+Plotly
+Pandas
+NumPy
+
+Project Requirements:
+
+1. Create a complete GitHub-ready repository with a professional folder structure including:
+
+data/
+models/
+training/
+streaming/
+backend/
+dashboard/
+database/
+alerts/
+utils/
+docker/
+notebooks/
+
+2. Implement the following modules:
+
+Data Simulation
+Create a Kafka producer that simulates patient vitals including:
+heart rate
+SpO2
+temperature
+blood pressure
+respiratory rate
+
+Streaming Pipeline
+Use Kafka topics to stream vitals data.
+Create a consumer that reads streaming data.
+
+Machine Learning Models
+Implement two anomaly detection models:
+Isolation Forest (scikit-learn)
+Autoencoder neural network (TensorFlow)
+
+Model Training
+Include scripts for:
+data preprocessing
+feature scaling
+model training
+model evaluation
+
+Database Layer
+Use PostgreSQL to store:
+patient_id
+vital signs
+timestamp
+anomaly flag
+severity score
+
+Backend API
+Create a Flask API with endpoints:
+GET /patients
+GET /anomalies
+GET /patient/<id>
+
+Dashboard
+Create a professional Streamlit dashboard that includes:
+real-time charts
+patient monitoring panel
+anomaly alerts
+interactive filtering
+
+Visualization
+Use Plotly for real-time charts.
+
+Alerts
+Implement email notifications using SMTP when critical anomalies occur.
+
+Explainable AI
+Integrate SHAP explainability to show which features caused anomalies.
+
+Deployment
+Provide Dockerfile and docker-compose setup for:
+Kafka
+PostgreSQL
+backend API
+dashboard
+
+Documentation
+Generate a professional README.md including:
+system architecture
+installation steps
+usage instructions
+project screenshots
+
+Code Size
+Generate detailed implementations with multiple modules and comments.
+The final repository should contain several Python files and exceed 3000–5000 lines of code.
+
+Output
+Provide the full project file structure and the contents of all files.
