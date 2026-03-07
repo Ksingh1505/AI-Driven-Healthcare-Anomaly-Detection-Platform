@@ -1,185 +1,54 @@
 # AI-Driven Healthcare Anomaly Detection Platform
 
-## Overview
-
-The AI-Driven Healthcare Anomaly Detection Platform is a real-time monitoring system designed to detect abnormal patterns in patient vital signs using Machine Learning and streaming data pipelines.
-
-Traditional healthcare monitoring systems rely on fixed thresholds and manual observation. This project improves patient monitoring by using machine learning models to automatically detect anomalies in physiological signals.
-
-The system processes real-time patient data, identifies abnormal patterns, stores detected anomalies in a database, and visualizes results through an interactive dashboard.
-
----
-
-## Features
-
-• Real-time patient vital sign monitoring  
-• Machine learning based anomaly detection  
-• Streaming data pipeline using Kafka  
-• Interactive dashboard for monitoring patients  
-• Database storage for historical health data  
-• Alert system for abnormal patient conditions  
-
----
+A real-time healthcare monitoring system that detects abnormal patient vitals using machine learning and deep learning.
 
 ## Tech Stack
-
-### Backend
-Python  
-Flask  
-
-### Machine Learning
-Scikit-learn  
-TensorFlow / Keras  
-
-### Data Processing
-Pandas  
-NumPy  
-
-### Streaming
-Apache Kafka  
-
-### Database
-PostgreSQL  
-
-### Visualization
-Streamlit  
-Plotly  
-
----
+- **Python** (Core Language)
+- **Apache Kafka** (Streaming Pipeline)
+- **Scikit-learn** (Isolation Forest Model)
+- **TensorFlow/Keras** (Autoencoder Model)
+- **PostgreSQL** (Database Layer)
+- **Flask** (REST API)
+- **Streamlit** (Dashboard)
+- **Docker & Docker Compose** (Deployment)
 
 ## System Architecture
+1. **Data Simulation (Producer)**: Simulates patient vitals and publishes to Kafka.
+2. **Streaming Pipeline (Consumer)**: Reads from Kafka, processes data through Machine Learning models.
+3. **Machine Learning**: Calculates anomaly flag, severity score, and Explainable AI metrics (SHAP).
+4. **Database Layer**: Stores the processed patient vitals and anomaly results in PostgreSQL.
+5. **Alerts**: Triggers SMTP email notifications for critical anomalies.
+6. **Backend API**: Exposes patient data and anomalies via Flask.
+7. **Dashboard**: Visualizes data in real-time using Streamlit and Plotly.
 
-Patient Vitals  
-↓  
-Kafka Producer  
-↓  
-Kafka Topic (Streaming Data)  
-↓  
-Kafka Consumer  
-↓  
-Machine Learning Model (Isolation Forest / Autoencoder)  
-↓  
-PostgreSQL Database  
-↓  
-Flask API  
-↓  
-Streamlit Dashboard  
+## Installation Steps
 
----
+1. Clone the repository
+2. Ensure Docker and Docker Compose are installed on your system.
+3. Build and start the services:
 
-## Machine Learning Models
+```bash
+docker-compose up --build
+```
 
-### Isolation Forest
+## Services
+- **Kafka / Zookeeper**: Ports 29092, 22181
+- **PostgreSQL**: Port 5432
+- **Flask Backend API**: http://localhost:5000
+- **Streamlit Dashboard**: http://localhost:8501
 
-Isolation Forest is used to detect anomalies by isolating unusual observations in the dataset.
+## Usage Instructions
+1. Open http://localhost:8501 in your browser to access the dashboard.
+2. The producer automatically generates simulated patient data and pushes it to Kafka.
+3. The consumer automatically reads this data, detects anomalies, and saves them to the database.
+4. Alerts are printed to the console (can be configured to send real emails in `alerts/notifier.py`).
+5. Use the API at `http://localhost:5000/patients` and `http://localhost:5000/anomalies` to access data programmatically.
 
-It works well for:
-- high dimensional data
-- unsupervised anomaly detection
+## Initial Setup for Machine Learning
+Before running the stream processors, you can train and generate the baseline models:
 
-### Autoencoder Neural Network
-
-Autoencoder is a deep learning model that learns compressed representations of data and detects anomalies by measuring reconstruction error.
-
----
-
-## Dataset
-
-The system can work with:
-
-• Simulated patient vital signs  
-• ICU datasets such as PhysioNet  
-• Healthcare monitoring datasets  
-
-Example features:
-
-- Heart Rate  
-- SpO₂  
-- Temperature  
-- Blood Pressure  
-
----
-
-## Installation
-
-Clone the repository
-
-Move into project folder
-cd AI-Healthcare-Anomaly-Detection
-
-
-Install dependencies
-
-
-pip install -r requirements.txt
-
-
----
-
-## Running the System
-
-Start Kafka server
-
-Start Kafka producer
-
-
-python streaming/producer.py
-
-
-Start Kafka consumer
-
-
-python streaming/consumer.py
-
-
-Start backend API
-
-
-python backend/app.py
-
-
-Start dashboard
-
-
-streamlit run dashboard/app.py
-
-
----
-
-## Dashboard
-
-The Streamlit dashboard allows users to:
-
-• Monitor patient vital signs  
-• View anomaly alerts  
-• Analyze trends in health data  
-• Track patient history  
-
----
-
-## Applications
-
-This system can be used in:
-
-• Hospitals  
-• Remote patient monitoring systems  
-• ICU monitoring systems  
-• Healthcare analytics platforms  
-
----
-
-## Future Improvements
-
-• Integration with IoT medical devices  
-• Real-time alert notifications  
-• Explainable AI for anomaly interpretation  
-• Deployment on cloud platforms  
-
----
-
-## Author
-
-Komal Singh  
-B.Tech CSE (AI & ML)<img width="1904" height="877" alt="Screenshot 2026-03-07 153843" src="https://github.com/user-attachments/assets/03a38f60-5c75-49ed-9e04-07ded1d8fa05" />
-<img width="1910" height="896" alt="Screenshot 2026-03-07 153831" src="https://github.com/user-attachments/assets/b99a3b9b-017e-408d-818a-78b0e0231e82" />
-<img width="1915" height="902" alt="Screenshot 2026-03-07 153814" src="https://github.com/user-attachments/assets/5171356f-62bf-4f71-9a5e-0041d0b6a5c0" />
+```bash
+pip install -r docker/requirements.txt
+python training/train_models.py
+```
+This generates mock data, scales it, and trains the Isolation Forest and Autoencoder models, saving them to `models/saved/`. Note that the streaming pipeline is currently mocked for immediate execution.
