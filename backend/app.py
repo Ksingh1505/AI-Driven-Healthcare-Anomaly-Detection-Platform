@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import psycopg2
 import os
 
+
 app = Flask(__name__)
 
 DB_HOST = os.getenv('DB_HOST', 'localhost')
