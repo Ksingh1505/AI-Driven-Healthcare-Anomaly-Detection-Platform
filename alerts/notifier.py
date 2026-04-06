@@ -2,6 +2,8 @@ import smtplib
 from email.mime.text import MIMEText
 import os
 
+
+
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
 SMTP_PORT = os.getenv("SMTP_PORT", "587")
 SENDER_EMAIL = os.getenv("SENDER_EMAIL", "alert@healthcare.local")
