@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 from tensorflow.keras import layers, models
 import joblib
-
+#MODEL IS TRAINED ONLY FOR 4 PATIENTS 
 def create_mock_data(n_samples=10000):
     np.random.seed(42)
     data = {
