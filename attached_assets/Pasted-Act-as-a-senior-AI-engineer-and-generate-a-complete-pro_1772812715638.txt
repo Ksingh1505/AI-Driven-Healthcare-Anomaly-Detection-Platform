@@ -1,5 +1,3 @@
-Act as a senior AI engineer and generate a complete production-level project.
-
 Project Title:
 AI-Driven Healthcare Anomaly Detection Platform
 
